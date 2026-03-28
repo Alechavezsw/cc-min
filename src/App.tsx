@@ -110,25 +110,31 @@ const services = [
     title: "Generación de Leads B2B",
     description: "Segmentación de precisión para tomadores de decisiones en proyectos mineros globales.",
     icon: <Target className="w-10 h-10 text-[#ffb800]" />,
-    tag: "01"
   },
   {
     title: "Branding Industrial",
     description: "Creando identidades de autoridad para las industrias más exigentes del mundo.",
     icon: <Factory className="w-10 h-10 text-[#ffb800]" />,
-    tag: "02"
   },
   {
     title: "SEO Técnico",
     description: "Dominando los resultados de búsqueda para equipos y servicios mineros de alto valor.",
     icon: <Search className="w-10 h-10 text-[#ffb800]" />,
-    tag: "03"
   },
   {
     title: "Inteligencia de Mercado",
     description: "Información impulsada por datos para la expansión en centros de extracción emergentes.",
     icon: <BarChart3 className="w-10 h-10 text-[#ffb800]" />,
-    tag: "04"
+  },
+  {
+    title: "Automatización Comercial",
+    description: "Flujos automatizados para convertir interés técnico en reuniones calificadas de alto valor.",
+    icon: <Zap className="w-10 h-10 text-[#ffb800]" />,
+  },
+  {
+    title: "Expansión Internacional",
+    description: "Estrategias multirregión para posicionarte del 1 al 6 en mercados mineros prioritarios.",
+    icon: <Globe className="w-10 h-10 text-[#ffb800]" />,
   },
 ];
 
@@ -201,13 +207,14 @@ export default function App() {
   useLayoutEffect(() => {
     // Lenis Smooth Scroll
     const lenis = new Lenis();
-    
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    
-    requestAnimationFrame(raf);
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    const lenisRaf = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(lenisRaf);
+    gsap.ticker.lagSmoothing(0);
 
     // Scroll Progress
     gsap.to(scrollProgressRef.current, {
@@ -391,6 +398,7 @@ export default function App() {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', moveCursor);
       ctx.revert();
+      gsap.ticker.remove(lenisRaf);
       lenis.destroy();
       clearTimeout(timer);
     };
@@ -627,7 +635,7 @@ export default function App() {
                       </div>
                     </div>
                     <span className="text-6xl font-display text-white/5 group-hover:text-[#ffb800]/20 transition-colors">
-                      {service.tag}
+                      {(idx + 1).toString().padStart(2, '0')}
                     </span>
                   </div>
                   <h4 className="text-5xl font-display uppercase italic mb-6 group-hover:text-[#ffb800] transition-colors">
